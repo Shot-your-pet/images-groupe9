@@ -32,6 +32,16 @@ public class Controlleur {
         this.facadeImage = facadeImage;
     }
 
+    public record ReponseAPI<T>(
+            int code,
+            String message,
+            T contenu
+    ){}
+
+    public record IdPhotoDTO(
+            UUID idPhoto
+    ){}
+
     @PostMapping("/upload")
     public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file,
                                          @RequestParam("type") ImageType type,
@@ -50,7 +60,7 @@ public class Controlleur {
             }
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                     .buildAndExpand(image.getId()).toUri();
-            return ResponseEntity.created(location).body(image.getId());
+            return ResponseEntity.created(location).body(new ReponseAPI<>(200, "Image sauvegardée", new IdPhotoDTO(image.getId())));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

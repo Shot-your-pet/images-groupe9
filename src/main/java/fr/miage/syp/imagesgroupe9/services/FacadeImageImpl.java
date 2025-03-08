@@ -3,6 +3,8 @@ package fr.miage.syp.imagesgroupe9.services;
 import fr.miage.syp.imagesgroupe9.model.documents.Image;
 import fr.miage.syp.imagesgroupe9.model.documents.ImageType;
 import fr.miage.syp.imagesgroupe9.model.repository.ImageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,8 @@ public class FacadeImageImpl implements FacadeImage{
 
     private final ImageRepository imageRepository;
     private final RabbitEventSender rabbitEventSender;
+
+    private static final Logger LOG = LoggerFactory.getLogger(FacadeImageImpl.class);
 
     public FacadeImageImpl(ImageRepository imageRepository, RabbitEventSender rabbitEventSender) {
         this.imageRepository = imageRepository;
@@ -52,7 +56,7 @@ public class FacadeImageImpl implements FacadeImage{
         image.setType(ImageType.PUBLICATION);
         image.setTaille(file.getSize() / 1024); // conversion bytes -> Ko
         image.setFilePath(filePath.toString());
-
+        LOG.info("Nouvelle image de publication sauvegardée : " + image.getId());
         return this.imageRepository.save(image);
     }
 
@@ -80,7 +84,9 @@ public class FacadeImageImpl implements FacadeImage{
         image.setTaille(file.getSize() / 1024); // conversion bytes -> Ko
         image.setFilePath(filePath.toString());
         image = this.imageRepository.save(image);
+        LOG.info("Nouvelle image d'avatar sauvegardée : " + image.getId());
         this.rabbitEventSender.sendUpdateAvatarEvent(idKeycloak, image.getId());
+        LOG.info("Envoie de l'évènement de changement d'avatar pour l'utilisateur : " + idKeycloak);
         return image;
     }
 
