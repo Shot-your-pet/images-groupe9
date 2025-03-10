@@ -1,5 +1,7 @@
 package fr.miage.syp.imagesgroupe9.services;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import fr.miage.syp.imagesgroupe9.model.documents.Image;
 import fr.miage.syp.imagesgroupe9.model.documents.ImageType;
 import fr.miage.syp.imagesgroupe9.model.repository.ImageRepository;
@@ -23,6 +25,8 @@ public class FacadeImageImpl implements FacadeImage{
 
     private final ImageRepository imageRepository;
     private final RabbitEventSender rabbitEventSender;
+    private final Snowflake snowflake = IdUtil.getSnowflake(1, 1);
+
 
     private static final Logger LOG = LoggerFactory.getLogger(FacadeImageImpl.class);
 
@@ -37,8 +41,8 @@ public class FacadeImageImpl implements FacadeImage{
         /*
         * Est appelée lors de l'upload d'une image de publication et renvoie au front l'id de l'image qui est généré pour que la publication sache quelle image lui est associé
         * */
-        UUID uuid = UUID.randomUUID();
-        String uniqueFileName = uuid + "_" + file.getOriginalFilename();
+        long snowflakeId = snowflake.nextId();
+        String uniqueFileName = snowflakeId + "_" + file.getOriginalFilename();
         Path uploadDirPath = Paths.get(IMAGE_PATH + "/publications");
 
         if (!Files.exists(uploadDirPath)) {
@@ -51,7 +55,7 @@ public class FacadeImageImpl implements FacadeImage{
         Files.write(filePath, file.getBytes());
 
         Image image = new Image();
-        image.setId(uuid);
+        image.setId(snowflakeId);
         image.setNom(file.getOriginalFilename());
         image.setType(ImageType.PUBLICATION);
         image.setTaille(file.getSize() / 1024); // conversion bytes -> Ko
@@ -65,8 +69,8 @@ public class FacadeImageImpl implements FacadeImage{
         /*
         * L'utilisateur change son image et l'information est directement transmise au service des utilisateurs. Il n'y a pas de double appel coté front
         * */
-        UUID uuid = UUID.randomUUID();
-        String uniqueFileName = uuid + "_" + file.getOriginalFilename();
+        long snowflakeId = snowflake.nextId();
+        String uniqueFileName = snowflakeId + "_" + file.getOriginalFilename();
         Path uploadDirPath = Paths.get(IMAGE_PATH+ "/avatar");
 
         if (!Files.exists(uploadDirPath)) {
@@ -78,7 +82,7 @@ public class FacadeImageImpl implements FacadeImage{
         Files.write(filePath, file.getBytes());
 
         Image image = new Image();
-        image.setId(uuid);
+        image.setId(snowflakeId);
         image.setNom(file.getOriginalFilename());
         image.setType(ImageType.AVATAR);
         image.setTaille(file.getSize() / 1024); // conversion bytes -> Ko

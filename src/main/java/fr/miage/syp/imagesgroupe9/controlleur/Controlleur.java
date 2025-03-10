@@ -39,7 +39,7 @@ public class Controlleur {
     ){}
 
     public record IdPhotoDTO(
-            UUID idPhoto
+            long idPhoto
     ){}
 
     @PostMapping("/upload")

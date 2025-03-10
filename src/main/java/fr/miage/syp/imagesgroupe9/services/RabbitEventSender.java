@@ -17,15 +17,15 @@ public class RabbitEventSender {
     }
 
     public record Message<T>(UUID idDemande, UUID idReponse, T data) implements Serializable {}
-    public record MessageNewAvatar(UUID idKeycloak, UUID idImage) implements Serializable {}
+    public record MessageNewAvatar(UUID idKeycloak, Long idImage) implements Serializable {}
 
     public <T> void send(UUID idDemande, UUID idReponse, T data){
         Message message = new Message(idDemande, idReponse, data);
         this.rabbitTemplate.convertAndSend("exchange", "routingkey", message);
     }
 
-    public void sendUpdateAvatarEvent(UUID idKeycloak, UUID idImage) {
+    public void sendUpdateAvatarEvent(UUID idKeycloak, long idImage) {
         MessageNewAvatar message = new MessageNewAvatar(idKeycloak, idImage);
-        this.rabbitTemplate.convertAndSend("update_avatar", message);
+        this.rabbitTemplate.convertAndSend("images.update_avatar", message);
     }
 }
