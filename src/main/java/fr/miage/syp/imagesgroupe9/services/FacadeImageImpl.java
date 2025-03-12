@@ -95,7 +95,7 @@ public class FacadeImageImpl implements FacadeImage{
     }
 
     @Override
-    public Image getImage(UUID idImage) {
+    public Image getImage(long idImage) {
         return this.imageRepository.getImageById(idImage);
     }
 }

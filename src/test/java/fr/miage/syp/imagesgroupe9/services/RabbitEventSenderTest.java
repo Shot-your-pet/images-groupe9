@@ -24,7 +24,7 @@ public class RabbitEventSenderTest {
     private RabbitEventSender rabbitEventSender;
 
     @Test
-    public void testSend() {
+    public void testSendOK() {
         UUID idDemande = UUID.randomUUID();
         UUID idReponse = UUID.randomUUID();
         String data = "Blc des tests";
@@ -43,7 +43,7 @@ public class RabbitEventSenderTest {
     }
 
     @Test
-    public void testSendUpdateAvatarEvent() {
+    public void testSendUpdateAvatarEventOK() {
         UUID idKeycloak = UUID.randomUUID();
         long idImage = 123456789L;
 

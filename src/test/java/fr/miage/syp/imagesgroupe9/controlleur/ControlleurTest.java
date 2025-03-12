@@ -92,7 +92,7 @@ class ControlleurTest {
     }
 
     @Test
-    void testUploadImage_Publication_Success() throws Exception {
+    void testUploadImage_PublicationOK() throws Exception {
         byte[] content = "publication image".getBytes();
         MockMultipartFile file = new MockMultipartFile("file", "pub.jpg", "image/jpeg", content);
         String dummyPath = tempDir.resolve("pub.jpg").toString();
@@ -111,7 +111,7 @@ class ControlleurTest {
     }
 
     @Test
-    void testUploadImage_InvalidType() throws Exception {
+    void testUploadImage_InvalidTypeKO() throws Exception {
         byte[] content = "fiujviuergier".getBytes();
         MockMultipartFile file = new MockMultipartFile("file", "fichier_qui_nest_pas_du_porno.jpg", "image/jpeg", content);
 
@@ -124,17 +124,17 @@ class ControlleurTest {
     }
 
     @Test
-    void testGetImage_Success() throws Exception {
+    void testGetImageOK() throws Exception {
         String contentStr = "image";
         Path imagePath = tempDir.resolve("testImage.jpg");
         try (FileOutputStream fos = new FileOutputStream(imagePath.toFile())) {
             fos.write(contentStr.getBytes());
         }
         Image dummyImage = creerImage(3L, "testImage.jpg", ImageType.PUBLICATION, imagePath.toString());
-        when(facadeImage.getImage(any())).thenReturn(dummyImage);
+        when(facadeImage.getImage(3L)).thenReturn(dummyImage);
 
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/images/{id}", UUID.randomUUID().toString())
+        mockMvc.perform(MockMvcRequestBuilders.get("/images/{id}", 3L)
                 .with(validJwt()))
                 .andExpect(status().isOk())
                 .andExpect(content().bytes(contentStr.getBytes()))

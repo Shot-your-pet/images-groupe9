@@ -8,7 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface ImageRepository extends MongoRepository<Image, UUID> {
-    Image getImageById(UUID id);
-
-    UUID id(UUID id);
+    Image getImageById(long id);
 }

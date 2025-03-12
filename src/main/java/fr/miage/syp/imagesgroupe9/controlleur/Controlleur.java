@@ -69,12 +69,13 @@ public class Controlleur {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<byte[]> getImageById(@PathVariable("id") UUID id) {
+    public ResponseEntity<byte[]> getImageById(@PathVariable("id") Long id) {
 
         Image image = this.facadeImage.getImage(id);
 
         Path path = Paths.get(image.getFilePath());
         if (!Files.exists(path)) {
+            LOG.info("Image {} n'existe pas dans le FS ", id);
             return ResponseEntity.notFound().build();
         }
 

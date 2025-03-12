@@ -22,7 +22,6 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
@@ -110,8 +109,8 @@ class FacadeImageImplTest {
     }
 
     @Test
-    void testGetImage() {
-        UUID dummyId = UUID.randomUUID();
+    void testGetImageOK() {
+        long dummyId = 123456789L;
         Image image = new Image();
         image.setId(123456789L);
         image.setNom("not_a_porn_too.jpg");

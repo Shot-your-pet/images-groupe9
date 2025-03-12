@@ -11,6 +11,6 @@ public interface FacadeImage {
 
     Image saveImagePublication(MultipartFile file, ImageType type, UUID idKeycloak) throws IOException;
     Image saveImageAvatar(MultipartFile file, ImageType type, UUID idKeycloak) throws IOException;
-    Image getImage(UUID idImage);
+    Image getImage(long idImage);
 
 }
