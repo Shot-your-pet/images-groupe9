@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.miage.syp.imagesgroupe9.model.documents.Image;
 import fr.miage.syp.imagesgroupe9.model.documents.ImageType;
 import fr.miage.syp.imagesgroupe9.services.FacadeImage;
+import fr.miage.syp.imagesgroupe9.services.RabbitEventSender;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mockito;
@@ -42,6 +43,9 @@ class ControlleurTest {
     @Autowired
     private FacadeImage facadeImage;
 
+    @Autowired
+    private RabbitEventSender rabbitEventSender;
+
     private final String USER_UUID = "11111111-1111-1111-1111-111111111111";
 
     private RequestPostProcessor validJwt() {
@@ -56,6 +60,10 @@ class ControlleurTest {
         @Bean
         public FacadeImage facadeImage() {
             return Mockito.mock(FacadeImage.class);
+        }
+        @Bean
+        public RabbitEventSender rabbitEventSender() {
+            return Mockito.mock(RabbitEventSender.class);
         }
     }
 
