@@ -23,9 +23,8 @@ public class SecurityConfig {
         http
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/images/upload").authenticated()
-                        .requestMatchers("/images/{id}").authenticated()
-                        .requestMatchers("/images/test/*").authenticated()
+                        .requestMatchers("/images/{id}").permitAll()
+                        .requestMatchers("/images/**").authenticated()
                         .anyRequest().denyAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
