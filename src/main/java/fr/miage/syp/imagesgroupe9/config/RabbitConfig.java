@@ -60,4 +60,9 @@ public class RabbitConfig {
         return new Queue("images.update_avatar", true);
     }
 
+    @Bean
+    public Queue creerQueueInfosUtilisateurs() {
+        return new Queue("images.test", true);
+    }
+
 }
